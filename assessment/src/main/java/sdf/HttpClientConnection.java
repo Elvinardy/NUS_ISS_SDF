@@ -12,7 +12,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Scanner;
 
-public class HttpClientConnection {
+import org.ietf.jgss.GSSException;
+
+public class HttpClientConnection implements Runnable{
 
     private final Socket s;
     private HttpWriter writer;
@@ -20,15 +22,25 @@ public class HttpClientConnection {
     private FileCheck file;
     String line = "";
     String[] docRoot;
+    String[] args;
+
 
 public HttpClientConnection (Socket s, FileCheck fCheck) {   //Constructor
     this.s = s;
 
 }
-
+@Override
 public void run() {
-  
+  startStream();
+  try {
+    args = getFromBrowser();
+} catch (IOException e) {
+    // TODO Auto-generated catch block
+    e.printStackTrace();
 }
+  checkRequest(args);
+}
+
 private void startStream() {
 
 try {
@@ -72,7 +84,7 @@ public void checkRequest(String[] argsRequest) {
         s.close();
         return;
     } 
-        if (Paths.get(link).contains("png")) {
+        if (argsRequest[1].contains("png")) {
             this.writer.writeString("HTTP:/1.1 200 Ok \n");
             this.writer.writeString("Content-Type: iamge/png \n");
             this.writer.writeString();
@@ -83,7 +95,6 @@ public void checkRequest(String[] argsRequest) {
         }
         this.write(fileDir);
     }
-
 }
 }
 // check if GET
@@ -101,9 +112,4 @@ public void checkRequest(String[] argsRequest) {
 // return 200 OK
 // return page or png
 
-
-
-
-
-}
 
