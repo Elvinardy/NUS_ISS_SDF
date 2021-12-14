@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Scanner;
@@ -71,11 +72,11 @@ public void checkRequest(String[] argsRequest) {
         s.close();
         return;
     } 
-        if (Paths.get(file1).contains("png")) {
+        if (Paths.get(link).contains("png")) {
             this.writer.writeString("HTTP:/1.1 200 Ok \n");
             this.writer.writeString("Content-Type: iamge/png \n");
             this.writer.writeString();
-            this.writer.writeBytes();
+            this.writer.writeBytes(Files.readAllBytes(path1));
 
             s.close();
             return;
@@ -84,13 +85,14 @@ public void checkRequest(String[] argsRequest) {
     }
 
 }
+}
 // check if GET
 // if not get, write 405
 
 // get if file exists 
-public void checkPath (String file) {
+//public void checkPath (String file) {
     
-}
+
 // if not write 404
 
 
