@@ -52,7 +52,7 @@ public class FileCheck {
             while ((html = br.readLine()) =! null) {
                 content.add(html);
             }
-            reader.close();
+            br.close();
 
             } catch(IOException e) {
                 System.err.println("An error occured when reading file..");

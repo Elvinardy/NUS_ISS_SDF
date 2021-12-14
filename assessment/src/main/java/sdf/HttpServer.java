@@ -24,7 +24,7 @@ public class HttpServer {
         this.fCheck = new FileCheck(docRoot);
     }
 
-    public void start() {
+    public void start() throws IOException {
         this.startServer();
 
         try {
