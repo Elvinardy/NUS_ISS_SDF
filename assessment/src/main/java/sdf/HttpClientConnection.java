@@ -1,11 +1,13 @@
 package sdf;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Scanner;
 
@@ -14,9 +16,11 @@ public class HttpClientConnection {
     private final Socket s;
     private HttpWriter writer;
     private BufferedReader br;
+    private FileCheck file;
     String line = "";
+    String[] docRoot;
 
-public HttpClientConnection (Socket s) {   //Constructor
+public HttpClientConnection (Socket s, FileCheck fCheck) {   //Constructor
     this.s = s;
 
 }
@@ -50,16 +54,29 @@ public void checkRequest(String[] argsRequest) {
 
     if(!method.equals("GET")) {
         this.writer.writeString("405 Method not Allowed");
+        s.close();
         return;
     }
+
+   
+    for(String str : docRoot) {
+        String fileDir = s + argsRequest[1];
+        Path path1 = Paths.get(fileDir);
+        File file1 = path1.toFile();
+        
+
     if(!Paths.get(link).toFile().exists()) {
         this.writer.writeString("404 not found..\n");
         this.writer.writeString(link + "not found");
+        s.close();
         return;
-    } else {
-        String fileDir = file.Opt.get();
-        if (fileHandler.isPNG(link)) {
-            this.writePNG(filDir);
+    } 
+        if (file1.contains("png")) {
+            this.writer.writeString("HTTP:/1.1 200 Ok /n");
+            this.writer.writeString("Content-Type: iamge/png\r\n\r\n");
+            this.writer.writeBytes();
+
+            s.close();
             return;
         }
         this.write(fileDir);

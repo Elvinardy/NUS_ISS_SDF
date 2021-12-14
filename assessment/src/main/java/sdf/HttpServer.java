@@ -15,21 +15,28 @@ public class HttpServer {
     private int port = 3000;
     private ServerSocket ss;
     private ExecutorService threadPool;
-    private FileHandler fh;
+    private FileCheck fCheck;
 
 
 
     public HttpServer (int port, String[] docRoot) {
         this.port = port;
-        this.fh = new FilesHandler(docRoot);
+        this.fCheck = new FileCheck(docRoot);
     }
 
     public void start() {
         this.startServer();
-        this.fileHandler = new FilesHandler
-    }
 
-    private void startServer() {
+        try {
+            this.startServer();
+        } catch (IOException e) {
+            System.err.println("Socket not connected..");
+            System.exit(1);
+        }
+
+
+    }
+    private void launchServer() {
         try {
             this.ss = new ServerSocket(port);
         } catch (IOException e) {
@@ -37,18 +44,19 @@ public class HttpServer {
             System.exit(1);
         }
     
-        if (!this.fileHandler.checkDocRoot()) {
+        if (!this.fCheck.checkingDoc()) {
             System.err.println("Invalid directory found..");
             System.exit(1);
         }
     
-        this.threadPool = ExecutorService.newFixedThreadPool(3);
+        this.threadPool = Executors.newFixedThreadPool(3);
     }
 
-    private void startServer() throws IOException (
+    private void startServer() throws IOException {
         while(true) {
-            Socket s = ServerSocket.accept();
-            threadPool.submit(new HttpClientConnection(s,fh));
+            Socket s = ss.accept();
+            threadPool.submit(new HttpClientConnection(s,fCheck));
         }
-    )
+    }
+}
 
