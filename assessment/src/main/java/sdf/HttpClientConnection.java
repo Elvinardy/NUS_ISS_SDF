@@ -38,7 +38,7 @@ try {
 } catch (IOException ioe) {
     System.out.println("Something went wrong..");
 }
-
+}
 
 
 private String[] getFromBrowser() throws IOException {
@@ -67,13 +67,14 @@ public void checkRequest(String[] argsRequest) {
 
     if(!Paths.get(link).toFile().exists()) {
         this.writer.writeString("404 not found..\n");
-        this.writer.writeString(link + "not found");
+        this.writer.writeString(link + " not found");
         s.close();
         return;
     } 
-        if (file1.contains("png")) {
-            this.writer.writeString("HTTP:/1.1 200 Ok /n");
-            this.writer.writeString("Content-Type: iamge/png\r\n\r\n");
+        if (Paths.get(file1).contains("png")) {
+            this.writer.writeString("HTTP:/1.1 200 Ok \n");
+            this.writer.writeString("Content-Type: iamge/png \n");
+            this.writer.writeString();
             this.writer.writeBytes();
 
             s.close();
